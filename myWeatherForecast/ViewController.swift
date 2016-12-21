@@ -5,6 +5,15 @@
 //  Created by Warren Hansen on 12/17/16.
 //  Copyright © 2016 Warren Hansen. All rights reserved.
 //
+/*
+feat: a new feature
+fix: a bug fix
+docs: changes to documentation
+style: formatting, missing semi colons, etc; no code change
+refactor: refactoring production code
+test: adding tests, refactoring test; no production code change
+chore: updating build tasks, package manager configs, etc; no production code change
+*/
 //  test get location by venice ca and GPS activity indicator
 //  test get forecast activity indicator
 //  find the api for forecast.. not very accurate, move on to gps request
@@ -196,8 +205,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     func findWeather() {
         
         var thisCity = ""
-        var thisState = ""
-        var countryCode = ""
+//        var thisState = ""
+//        var countryCode = ""
         var temp = 0.0
         var weather = ""
         
@@ -259,8 +268,6 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         task.resume()
     }
     
-    @IBOutlet weak var forecastAction: UIButton!
-    
     // MARK: - Get Weather - Forecast
     // how do I enter the date?
     func getForecast() {
@@ -278,12 +285,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                 print("Error is \(error.localizedDescription)")
                 }
             
-            var forecastString = "" // to display and prove data not for final UI
-            
             // weather detail object
             if  let forecastDetail = ForecastDetail.forecastDetialArray(json: json!) {
-                
-                var  dateArray:[String] = [" "]
                 
                 var dateDetailArray:[[String]] = [[" "]]
                 
@@ -291,18 +294,14 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                 
                 var i = 0
                 
+                dateDetailArray.removeAll()
+                
                 for element in forecastDetail {
                     
                     // date object array
                     let forecastDate = ForecastDate.forecastDateArray(json: json!)
                     let this = (forecastDate?[i].weekdayShort)! as String
-                    
-                    forecastString += this + " " +  element.low + " " + element.high + " " + element.conditions + "\n"
-                    
-                    //dateArray.append(forecastString)
-                    
                     dateDeats.removeAll()
-
                     dateDeats.append(this)
                     dateDeats.append(element.low)
                     dateDeats.append(element.high)
@@ -313,17 +312,13 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                      i = i + 1
                 }
                 
-                // populate forecast with data from json
-                
-                dateDetailArray.remove(at: 0)
+                // MARK: - use date detail array in UI forecast
+
                 print(dateDetailArray)
                 
-                dateArray.remove(at: 0)
                 DispatchQueue.main.async(execute: {
-                    self.forecastOutput.text = forecastString
+
                     self.weathyerActivity.stopAnimating()
-                    
-                    // TODO: - use date detail array in UI forecast
                     
                     self.forecastOneDay.text = dateDetailArray[0][0]
                     
