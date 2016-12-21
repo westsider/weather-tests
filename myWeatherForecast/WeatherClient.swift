@@ -60,6 +60,8 @@ func setIcon(input:String)-> UIImage {
         thisImage = UIImage(named: "overcast")!
     case "cloudy":
         thisImage = UIImage(named: "overcast")!
+    case "mostlycloudy":
+        thisImage = UIImage(named: "overcast")!
     case "rain":
         thisImage = UIImage(named: "chancerain")!
     case "nt_partlycloudy":

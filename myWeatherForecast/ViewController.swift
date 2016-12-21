@@ -21,7 +21,9 @@ chore: updating build tasks, package manager configs, etc; no production code ch
 //  show location derrived from gps
 //  develope UI
 //  populate UI
+//  TODO: - call forecast after location aquired
 
+ // missing if location not found
 //  eneter a date
 //  show that date
 //  show date + 3 days
@@ -33,8 +35,6 @@ import CoreLocation
 class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var cityInput: UISearchBar!
-    
-    @IBOutlet weak var forecastOutput: UITextView!
     
     @IBOutlet weak var locationActivity: UIActivityIndicatorView!
     
@@ -249,7 +249,6 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                             }
                             
                             DispatchQueue.main.async(execute: {
-                               //self.weatherReport.text  = "\(thisCity) \(thisState) \n\(countryCode)\n\n Currently \n\(temp)°\n\(weather)"
                                 
                                 self.currentState.text = thisCity.uppercased()
                                 
@@ -257,6 +256,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                                 
                                 self.currentConditions.text = weather
                                 
+                                self.getForecast()
                             })
                         }
                     }
@@ -352,11 +352,6 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     self.forecastThreeHiLo.text = (dateDetailArray[2][2]) + "°" + " / " + (dateDetailArray[2][3]) + "°"
                     
                     self.forecastThreeCond.text = dateDetailArray[2][4]
-                    
-                    // TODO: - missing san fran sisco
-                    // missing if not location found
-                    // TODO: - use date to display corrent forecast and current conditions
-                    // TODO: - call forecast after location aquired
                     
                 })
             }
