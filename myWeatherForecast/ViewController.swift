@@ -6,14 +6,14 @@
 //  Copyright © 2016 Warren Hansen. All rights reserved.
 //
 /*
-feat: a new feature
-fix: a bug fix
-docs: changes to documentation
-style: formatting, missing semi colons, etc; no code change
-refactor: refactoring production code
-test: adding tests, refactoring test; no production code change
-chore: updating build tasks, package manager configs, etc; no production code change
-*/
+ feat: a new feature
+ fix: a bug fix
+ docs: changes to documentation
+ style: formatting, missing semi colons, etc; no code change
+ refactor: refactoring production code
+ test: adding tests, refactoring test; no production code change
+ chore: updating build tasks, package manager configs, etc; no production code change
+ */
 //  test get location by venice ca and GPS activity indicator
 //  test get forecast activity indicator
 //  find the api for forecast.. not very accurate, move on to gps request
@@ -21,9 +21,10 @@ chore: updating build tasks, package manager configs, etc; no production code ch
 //  show location derrived from gps
 //  develope UI
 //  populate UI
-//  TODO: - call forecast after location aquired
+//  call forecast after location aquired
 
- // missing if location not found
+//  stack view for weather
+//  missing if location not found
 //  eneter a date
 //  show that date
 //  show date + 3 days
@@ -33,7 +34,7 @@ import UIKit
 import CoreLocation
 
 class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDelegate {
-
+    
     @IBOutlet weak var cityInput: UISearchBar!
     
     @IBOutlet weak var locationActivity: UIActivityIndicatorView!
@@ -48,7 +49,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     @IBOutlet weak var currentConditions: UILabel!
     
-    // forecast text
+    // forecast text day 1
     
     @IBOutlet weak var forecastOneDay: UILabel!
     
@@ -58,7 +59,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     @IBOutlet weak var forecastOneConditions: UILabel!
     
-    //-----
+    //----- day 2
     
     @IBOutlet weak var forecastTwoDay: UILabel!
     
@@ -68,7 +69,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     @IBOutlet weak var forecastTwoCond: UILabel!
     
-    //----
+    //---- day 3
     
     @IBOutlet weak var forecastThreeDay: UILabel!
     
@@ -114,8 +115,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         cityInput.text = "Festus MO"
         locationManager.requestAlwaysAuthorization()
     }
-
-
+    
+    
     @IBAction func searchAction(_ sender: Any) {
         findOnMap(input: cityInput.text!)
         findWeather()
@@ -124,7 +125,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     @IBAction func forecastAction(_ sender: Any) {
         getForecast()
     }
-
+    
     // MARK: - Find my location
     func findMyLocation() {
         locationManager.delegate = self
@@ -144,7 +145,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         print(latLong)
         forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast7day/q/lat=\(lat)&lon=-\(long).json")
         locationManager.stopUpdatingLocation()
-
+        
         CLGeocoder().reverseGeocodeLocation(locationObj, completionHandler: {(placemarks, error) -> Void in
             
             if error != nil {
@@ -221,7 +222,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                 
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                      // print("jsonResult:  \(jsonResult)")
+                    // print("jsonResult:  \(jsonResult)")
                     
                     if let current = jsonResult["current_observation"] as? NSDictionary {
                         //  print("Current: \(current)")
@@ -236,7 +237,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                                 thisState = state as! String
                             }
                             if let country = display_location["country_iso3166"]{
-                                  //    print("countryCode: \(country)")
+                                //    print("countryCode: \(country)")
                                 countryCode = country as! String
                             }
                             if let temps = current["temp_f"]  {
@@ -280,17 +281,13 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             
             do {
                 json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-                } catch {
+            } catch {
                 json = nil
                 print("Error is \(error.localizedDescription)")
-                }
+            }
             
             // weather detail object
             if  let forecastDetail = ForecastDetail.forecastDetialArray(json: json!) {
-                
-//                var dateDetailArray:[[AnyObject]] = [[" " as AnyObject]]
-//                
-//                var dateDeats:[AnyObject] = [" " as AnyObject]
                 
                 var dateDetailArray:[[String]] = [[" "]]
                 
@@ -314,15 +311,15 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     dateDetailArray.append(dateDeats)
                     
-                     i = i + 1
+                    i = i + 1
                 }
                 
                 // MARK: - use date detail array in UI forecast
-
+                
                 print(dateDetailArray)
                 
                 DispatchQueue.main.async(execute: {
-
+                    
                     self.weathyerActivity.stopAnimating()
                     
                     self.forecastOneDay.text = dateDetailArray[0][0]
@@ -347,7 +344,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     self.forecastThreeDay.text = dateDetailArray[2][0]
                     
-                   self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2][1])
+                    self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2][1])
                     
                     self.forecastThreeHiLo.text = (dateDetailArray[2][2]) + "°" + " / " + (dateDetailArray[2][3]) + "°"
                     
@@ -355,7 +352,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                 })
             }
-
+            
         }
         task.resume()
     }
