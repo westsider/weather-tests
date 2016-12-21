@@ -20,8 +20,8 @@ chore: updating build tasks, package manager configs, etc; no production code ch
 //  activity indicator durring searc
 //  show location derrived from gps
 //  develope UI
-
 //  populate UI
+
 //  eneter a date
 //  show that date
 //  show date + 3 days
@@ -205,8 +205,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     func findWeather() {
         
         var thisCity = ""
-//        var thisState = ""
-//        var countryCode = ""
+        var thisState = ""
+        var countryCode = ""
         var temp = 0.0
         var weather = ""
         
@@ -288,6 +288,10 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             // weather detail object
             if  let forecastDetail = ForecastDetail.forecastDetialArray(json: json!) {
                 
+//                var dateDetailArray:[[AnyObject]] = [[" " as AnyObject]]
+//                
+//                var dateDeats:[AnyObject] = [" " as AnyObject]
+                
                 var dateDetailArray:[[String]] = [[" "]]
                 
                 var dateDeats:[String] = [" "]
@@ -303,10 +307,11 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     let this = (forecastDate?[i].weekdayShort)! as String
                     dateDeats.removeAll()
                     dateDeats.append(this)
+                    dateDeats.append(element.icon)      // change arrays to anyobject first || create image array
                     dateDeats.append(element.low)
                     dateDeats.append(element.high)
                     dateDeats.append(element.conditions)
-                    //  dateDeats.append(element.icon)      // change arrays to anyobject first || create image array
+                    
                     dateDetailArray.append(dateDeats)
                     
                      i = i + 1
@@ -322,33 +327,34 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     self.forecastOneDay.text = dateDetailArray[0][0]
                     
-                     //self.forecastOneIcon.text = dateDetailArray[0][1]
+                    self.forecastOneIcon.image =  setIcon(input: dateDetailArray[0][1])
                     
-                    self.forecastOneHiLo.text = dateDetailArray[0][1] + "°" + " / " + dateDetailArray[0][2] + "°"
+                    self.forecastOneHiLo.text = (dateDetailArray[0][2]) + "°" + " / " + (dateDetailArray[0][3] ) + "°"
                     
-                    self.forecastOneConditions.text = dateDetailArray[0][3]
+                    self.forecastOneConditions.text = dateDetailArray[0][4]
                     
                     //-----
                     
                     self.forecastTwoDay.text = dateDetailArray[1][0]
                     
-                    //@IBOutlet weak var forecastTwoIcon: UIImageView!
+                    self.forecastTwoIcon.image = setIcon(input: dateDetailArray[1][1])
                     
-                    self.forecastTwoHiLo.text = dateDetailArray[1][1] + "°" + " / " + dateDetailArray[1][2] + "°"
+                    self.forecastTwoHiLo.text = (dateDetailArray[1][2]) + "°" + " / " + (dateDetailArray[1][3]) + "°"
                     
-                    self.forecastTwoCond.text = dateDetailArray[1][3]
+                    self.forecastTwoCond.text = dateDetailArray[1][4]
                     
                     //----
                     
                     self.forecastThreeDay.text = dateDetailArray[2][0]
                     
-                   // @IBOutlet weak var forecastThreeIcon: UIImageView!
+                   self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2][1])
                     
-                    self.forecastThreeHiLo.text = dateDetailArray[2][1] + "°" + " / " + dateDetailArray[2][2] + "°"
+                    self.forecastThreeHiLo.text = (dateDetailArray[2][2]) + "°" + " / " + (dateDetailArray[2][3]) + "°"
                     
-                    self.forecastThreeCond.text = dateDetailArray[2][3]
+                    self.forecastThreeCond.text = dateDetailArray[2][4]
                     
-                    // TODO: - get icon of conditions from json
+                    // TODO: - missing san fran sisco
+                    // missing if not location found
                     // TODO: - use date to display corrent forecast and current conditions
                     // TODO: - call forecast after location aquired
                     
@@ -359,4 +365,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         task.resume()
     }
 }
+
+
+
 

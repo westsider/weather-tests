@@ -27,6 +27,54 @@ struct ForecastDate {
     let weekday: String
 }
 
+/*
+struct weatherIcons {
+    let chancerain =  UIImage(named: "chancerain")!
+    let chancetstorms =  UIImage(named: "chancetstorms")!
+    let clear =  UIImage(named: "clear")!
+    let none =  UIImage(named: "none")!
+    let nt_clear =  UIImage(named: "nt_clear")!
+    let nt_partlycloudy =  UIImage(named: "nt_partlycloudy")!
+    let overcast =  UIImage(named: "overcast")!
+    let partlycloudy =  UIImage(named: "partlycloudy")!
+    let snow =  UIImage(named: "snow")!
+}
+*/
+
+func setIcon(input:String)-> UIImage {
+    
+    var thisImage:UIImage
+    
+    switch input {
+    case "chancerain":
+        thisImage = UIImage(named: "chancerain")!
+    case "chancetstorms":
+        thisImage =  UIImage(named: "chancetstorms")!
+    case "clear":
+        thisImage = UIImage(named: "clear")!
+    case "nt_clear":
+        thisImage = UIImage(named: "nt_clear")!
+    case "partlycloudy":
+        thisImage = UIImage(named: "partlycloudy")!
+    case "overcast":
+        thisImage = UIImage(named: "overcast")!
+    case "cloudy":
+        thisImage = UIImage(named: "overcast")!
+    case "rain":
+        thisImage = UIImage(named: "chancerain")!
+    case "nt_partlycloudy":
+        thisImage = UIImage(named: "partlycloudy")!
+    case "snow":
+        thisImage = UIImage(named: "snow")!
+    case "fog":
+        thisImage = UIImage(named: "snow")!
+    default:
+        thisImage = UIImage(named: "none")!
+    }
+    
+    return thisImage
+}
+
 extension ForecastDate {
     
     /// Initialize ForecastDate model from JSON data.
