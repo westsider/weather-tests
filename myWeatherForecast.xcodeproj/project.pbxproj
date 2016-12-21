@@ -7,14 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D14BB051E0992FF0095C17C /* WeatherClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D14BB041E0992FF0095C17C /* WeatherClient.swift */; };
 		0D23AB921E05B15200A03BFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D23AB911E05B15200A03BFA /* AppDelegate.swift */; };
 		0D23AB941E05B15200A03BFA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D23AB931E05B15200A03BFA /* ViewController.swift */; };
 		0D23AB971E05B15200A03BFA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB951E05B15200A03BFA /* Main.storyboard */; };
 		0D23AB991E05B15200A03BFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB981E05B15200A03BFA /* Assets.xcassets */; };
 		0D23AB9C1E05B15200A03BFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB9A1E05B15200A03BFA /* LaunchScreen.storyboard */; };
+		0DE69EE41E073FCB0094EE93 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE69EE31E073FCB0094EE93 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D14BB041E0992FF0095C17C /* WeatherClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherClient.swift; sourceTree = "<group>"; };
 		0D23AB8E1E05B15200A03BFA /* myWeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myWeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D23AB911E05B15200A03BFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D23AB931E05B15200A03BFA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +25,7 @@
 		0D23AB981E05B15200A03BFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0D23AB9B1E05B15200A03BFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0D23AB9D1E05B15200A03BFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0DE69EE31E073FCB0094EE93 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DE69EE41E073FCB0094EE93 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +45,7 @@
 			children = (
 				0D23AB901E05B15200A03BFA /* myWeatherForecast */,
 				0D23AB8F1E05B15200A03BFA /* Products */,
+				0DE69EE21E073FCB0094EE93 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,12 +62,21 @@
 			children = (
 				0D23AB951E05B15200A03BFA /* Main.storyboard */,
 				0D23AB931E05B15200A03BFA /* ViewController.swift */,
+				0D14BB041E0992FF0095C17C /* WeatherClient.swift */,
 				0D23AB981E05B15200A03BFA /* Assets.xcassets */,
 				0D23AB9A1E05B15200A03BFA /* LaunchScreen.storyboard */,
 				0D23AB9D1E05B15200A03BFA /* Info.plist */,
 				0D23AB911E05B15200A03BFA /* AppDelegate.swift */,
 			);
 			path = myWeatherForecast;
+			sourceTree = "<group>";
+		};
+		0DE69EE21E073FCB0094EE93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0DE69EE31E073FCB0094EE93 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +154,7 @@
 			files = (
 				0D23AB941E05B15200A03BFA /* ViewController.swift in Sources */,
 				0D23AB921E05B15200A03BFA /* AppDelegate.swift in Sources */,
+				0D14BB051E0992FF0095C17C /* WeatherClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +316,7 @@
 				0D23ABA21E05B15200A03BFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

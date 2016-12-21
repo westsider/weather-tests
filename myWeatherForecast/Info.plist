@@ -24,6 +24,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allows access to your location while getting a weather forecast</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Only requires access when you dont enter a location for getting a weather forecast</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
