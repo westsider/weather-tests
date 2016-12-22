@@ -22,12 +22,12 @@
 //  develope UI
 //  populate UI
 //  call forecast after location aquired
-
-//  stack view for weather
 //  missing if location not found
+
 //  eneter a date
 //  show that date
 //  show date + 3 days
+//  stack view for weather
 //  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
 
 import UIKit
@@ -112,18 +112,14 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cityInput.text = "Festus MO"
+        cityInput.text = "Festus Canada"
         locationManager.requestAlwaysAuthorization()
     }
     
-    
+    //  MARK: - Update Button
     @IBAction func searchAction(_ sender: Any) {
         findOnMap(input: cityInput.text!)
-        findWeather()
-    }
-    
-    @IBAction func forecastAction(_ sender: Any) {
-        getForecast()
+        //findWeather()
     }
     
     // MARK: - Find my location
@@ -154,7 +150,9 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             } else {
                 if let placemarks = placemarks, let placemark = placemarks.first {
                     
-                    self.cityInput.text = placemark.locality! + " " + placemark.administrativeArea! // or loctio
+                    self.cityInput.text = placemark.locality! + " " + placemark.administrativeArea! // or loction
+                    self.findOnMap(input: self.cityInput.text!)
+                    //self.findWeather()
                 } else {
                     self.cityInput.text = "No Matching Addresses Found"
                 }
@@ -187,11 +185,13 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             first = String(split.prefix(upTo: 1).joined(separator: [" "]))
             url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first + ".json")
             forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast/q/" + last + "/" + first + ".json")
+            self.findWeather()
         case 3:
             last    = String(split.suffix(1).joined(separator: [" "]))
             first = String(split.prefix(upTo: 2).joined(separator: [" "]))
             url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
             forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+            self.findWeather()
             
         default:
             first = String(split.prefix(upTo: 1).joined(separator: [" "]))
@@ -214,6 +214,16 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
             
             if let urlContent = data {
+                
+                if error != nil {
+                    
+                    print("error: \(error)")
+                    
+                }
+                
+                if response != nil {
+                    print("response: \(response)")
+                }
                 
                 DispatchQueue.main.async(execute: {
                     self.locationActivity.stopAnimating()
@@ -260,6 +270,15 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                                 self.getForecast()
                             })
                         }
+                    } else {
+                        print("City Not Found!")
+                        DispatchQueue.main.async(execute: {
+                            self.currentState.text = "ERROR"
+                        
+                            self.currentTemp.text = "⚠️"
+                        
+                            self.currentConditions.text = "Unknown Places"
+                        })
                     }
                 } catch {
                     print("JSON serialization failed")
