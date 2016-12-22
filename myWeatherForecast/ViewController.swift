@@ -25,10 +25,10 @@
 //  missing if location not found
 //  add date picker
 //  calc todays date - picker date: for days in the future
-
 //  chance forcast day to num in array
 //  update forcast when picker moves
-//  show date + 3 days
+
+//  show date on forecast
 //  stack view for weather
 //  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
 
@@ -240,19 +240,19 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             last    = String(split.suffix(1).joined(separator: [" "]))
             first = String(split.prefix(upTo: 1).joined(separator: [" "]))
             url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast/q/" + last + "/" + first + ".json")
+            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first + ".json")
             self.findWeather()
         case 3:
             last    = String(split.suffix(1).joined(separator: [" "]))
             first = String(split.prefix(upTo: 2).joined(separator: [" "]))
             url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
             self.findWeather()
             
         default:
             first = String(split.prefix(upTo: 1).joined(separator: [" "]))
             url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + first + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast/q/" + first + ".json")
+            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + first + ".json")
             //  print("ERROR: Please include a state or country")
             cityInput.text = "Please include a state or country"
         }
@@ -275,10 +275,6 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     print("error: \(error)")
                     
-                }
-                
-                if response != nil {
-                    print("response: \(response)")
                 }
                 
                 DispatchQueue.main.async(execute: {
@@ -389,6 +385,11 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     i = i + 1
                 }
                 
+                // MARK: - Limit forecast to 10 days
+                if self.NumOfDays >= 10 { self.NumOfDays = 7 }
+                // if num days neg then make 0
+                if self.NumOfDays < 0 { self.NumOfDays = 0 }
+                
                 // MARK: - use date detail array in UI forecast
                 
                 print(dateDetailArray)
@@ -397,33 +398,35 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     self.weathyerActivity.stopAnimating()
                     
-                    self.forecastOneDay.text = dateDetailArray[0][0]
+                    print("Num Days: \(self.NumOfDays)")
                     
-                    self.forecastOneIcon.image =  setIcon(input: dateDetailArray[0][1])
+                    self.forecastOneDay.text = dateDetailArray[0 + self.NumOfDays ][0]
                     
-                    self.forecastOneHiLo.text = (dateDetailArray[0][2]) + "°" + " / " + (dateDetailArray[0][3] ) + "°"
+                    self.forecastOneIcon.image =  setIcon(input: dateDetailArray[0 + self.NumOfDays ][1])
                     
-                    self.forecastOneConditions.text = dateDetailArray[0][4]
+                    self.forecastOneHiLo.text = (dateDetailArray[0 + self.NumOfDays ][2]) + "°" + " / " + (dateDetailArray[0][3] ) + "°"
+                    
+                    self.forecastOneConditions.text = dateDetailArray[0 + self.NumOfDays ][4]
                     
                     //-----
                     
-                    self.forecastTwoDay.text = dateDetailArray[1][0]
+                    self.forecastTwoDay.text = dateDetailArray[1 + self.NumOfDays ][0]
                     
-                    self.forecastTwoIcon.image = setIcon(input: dateDetailArray[1][1])
+                    self.forecastTwoIcon.image = setIcon(input: dateDetailArray[1 + self.NumOfDays ][1])
                     
-                    self.forecastTwoHiLo.text = (dateDetailArray[1][2]) + "°" + " / " + (dateDetailArray[1][3]) + "°"
+                    self.forecastTwoHiLo.text = (dateDetailArray[1 + self.NumOfDays ][2]) + "°" + " / " + (dateDetailArray[1 + self.NumOfDays ][3]) + "°"
                     
-                    self.forecastTwoCond.text = dateDetailArray[1][4]
+                    self.forecastTwoCond.text = dateDetailArray[1 + self.NumOfDays ][4]
                     
                     //----
                     
-                    self.forecastThreeDay.text = dateDetailArray[2][0]
+                    self.forecastThreeDay.text = dateDetailArray[2 + self.NumOfDays ][0]
                     
-                    self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2][1])
+                    self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2 + self.NumOfDays ][1])
                     
-                    self.forecastThreeHiLo.text = (dateDetailArray[2][2]) + "°" + " / " + (dateDetailArray[2][3]) + "°"
+                    self.forecastThreeHiLo.text = (dateDetailArray[2 + self.NumOfDays ][2]) + "°" + " / " + (dateDetailArray[2 + self.NumOfDays ][3]) + "°"
                     
-                    self.forecastThreeCond.text = dateDetailArray[2][4]
+                    self.forecastThreeCond.text = dateDetailArray[2 + self.NumOfDays ][4]
                     
                 })
             }
