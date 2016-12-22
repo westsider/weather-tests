@@ -24,8 +24,10 @@
 //  call forecast after location aquired
 //  missing if location not found
 //  add date picker
+//  calc todays date - picker date: for days in the future
 
-//  show that date in forecast 1
+//  chance forcast day to num in array
+//  update forcast when picker moves
 //  show date + 3 days
 //  stack view for weather
 //  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
@@ -98,6 +100,11 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     var latLong = ""
     
+    var pickedDate = Date()
+    
+    var NumOfDays = 1
+
+    
     // this is my current weather api call
     //  https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/CA/Venice.json
     
@@ -145,7 +152,25 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         dateFormatter.timeStyle = DateFormatter.Style.none
         
         dateTextField.text = dateFormatter.string(from: sender.date)
+        
+        // calc num of days in future to forecast
+        pickedDate =  sender.date
+        
+        NumOfDays = daysBetweenDates(startDate: Date(), endDate: pickedDate) + 1
+        
+        print("Num of Days: \(NumOfDays)")
     }
+    
+    func daysBetweenDates(startDate: Date, endDate: Date) -> Int
+    {
+        let calendar = Calendar.current
+        //let components = calendar.components([.day], from: startDate, to: endDate, options: [])
+        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        return components.day!
+    }
+
+
+    
     
     // MARK: Touch Events
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
