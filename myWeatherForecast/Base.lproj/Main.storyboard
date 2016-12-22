@@ -73,6 +73,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="dateTextEditing:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="hcK-lD-lFA"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Wild Canary" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mrP-MG-osy">
                                 <rect key="frame" x="123" y="351" width="257" height="30"/>
@@ -392,6 +395,7 @@
                         <outlet property="currentConditions" destination="c7m-eb-hSr" id="YNL-4z-uYv"/>
                         <outlet property="currentState" destination="5kB-mC-5zC" id="bvw-SQ-Oh5"/>
                         <outlet property="currentTemp" destination="G2L-0e-g7D" id="BQs-Qn-2zw"/>
+                        <outlet property="dateTextField" destination="P1I-zi-8T7" id="1lU-8u-pkR"/>
                         <outlet property="forecastOneConditions" destination="KDF-5F-syf" id="leK-Qk-2o1"/>
                         <outlet property="forecastOneDay" destination="hWe-on-ztd" id="kCM-jZ-elr"/>
                         <outlet property="forecastOneHiLo" destination="sGS-cY-MqD" id="PjK-Id-YY1"/>

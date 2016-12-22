@@ -23,9 +23,9 @@
 //  populate UI
 //  call forecast after location aquired
 //  missing if location not found
+//  add date picker
 
-//  eneter a date
-//  show that date
+//  show that date in forecast 1
 //  show date + 3 days
 //  stack view for weather
 //  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
@@ -40,6 +40,9 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     @IBOutlet weak var locationActivity: UIActivityIndicatorView!
     
     @IBOutlet weak var weathyerActivity: UIActivityIndicatorView!
+    
+    @IBOutlet weak var dateTextField: UITextField!
+    
     
     // current conditions text
     
@@ -112,14 +115,42 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cityInput.text = "Festus Canada"
+        cityInput.text = "Los Angeles CA"
         locationManager.requestAlwaysAuthorization()
     }
     
     //  MARK: - Update Button
     @IBAction func searchAction(_ sender: Any) {
         findOnMap(input: cityInput.text!)
-        //findWeather()
+    }
+    
+    // MARK: - Add Date
+    @IBAction func dateTextEditing(_ sender: UITextField) {
+        
+        let datePickerView:UIDatePicker = UIDatePicker()
+        
+        datePickerView.datePickerMode = UIDatePickerMode.date
+        
+        sender.inputView = datePickerView
+        
+        datePickerView.addTarget(self, action: #selector(ViewController.datePickerValueChanged), for: UIControlEvents.valueChanged)
+    }
+    
+    func datePickerValueChanged(sender:UIDatePicker) {
+        
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateStyle = DateFormatter.Style.medium
+        
+        dateFormatter.timeStyle = DateFormatter.Style.none
+        
+        dateTextField.text = dateFormatter.string(from: sender.date)
+    }
+    
+    // MARK: Touch Events
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //closekeyboard()
+        self.view.endEditing(true)
     }
     
     // MARK: - Find my location
