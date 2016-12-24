@@ -27,8 +27,8 @@
 //  calc todays date - picker date: for days in the future
 //  chance forcast day to num in array
 //  update forcast when picker moves
+//  show short date on forecast
 
-//  show date on forecast
 //  stack view for weather
 //  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
 
@@ -131,7 +131,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         findOnMap(input: cityInput.text!)
     }
     
-    // MARK: - Add Date
+    // MARK: - Add Date with Picker
     @IBAction func dateTextEditing(_ sender: UITextField) {
         
         let datePickerView:UIDatePicker = UIDatePicker()
@@ -161,6 +161,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         print("Num of Days: \(NumOfDays)")
     }
     
+    //  MARK: - Functions to convert picker date to a day in the future for forecast
     func daysBetweenDates(startDate: Date, endDate: Date) -> Int
     {
         let calendar = Calendar.current
@@ -168,9 +169,32 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         let components = calendar.dateComponents([.day], from: startDate, to: endDate)
         return components.day!
     }
-
-
     
+    func addDays(days: Int) -> Date {
+        let today = Date()
+        let tomorrow = Calendar.current.date(byAdding: .day, value: days, to: today)
+        print("\(tomorrow)")
+        return tomorrow!
+    }
+    
+    func convertShortDate(date: Date) -> String {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM / dd"
+        let stringDate = formatter.string(from: date)
+        return stringDate
+        
+    }
+    
+    //  MARK: -  convert number of days in the furute to Short Date
+    func numOfDaysToShortDate(numOfDays: Int) -> String {
+        
+        let firstFutureDate = self.addDays(days: numOfDays)        //  ( today + numOfDays )
+        
+        print("Is This the first future DATE? \(firstFutureDate)")      //  this the the future DATE
+        
+        return self.convertShortDate(date: firstFutureDate)    // this is the furt future short date STRING
+    }
     
     // MARK: Touch Events
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -178,7 +202,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         self.view.endEditing(true)
     }
     
-    // MARK: - Find my location
+    // MARK: - Find my location using GPS
     func findMyLocation() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -195,7 +219,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         long = "\(coord.longitude)"
         latLong = "\(lat)\(long)"
         print(latLong)
-        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast7day/q/lat=\(lat)&lon=-\(long).json")
+        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
         locationManager.stopUpdatingLocation()
         
         CLGeocoder().reverseGeocodeLocation(locationObj, completionHandler: {(placemarks, error) -> Void in
@@ -390,6 +414,24 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                 // if num days neg then make 0
                 if self.NumOfDays < 0 { self.NumOfDays = 0 }
                 
+                /*
+                 func daysBetweenDates(startDate: Date, endDate: Date) -> Int   {
+                    let calendar = Calendar.current
+                    //let components = calendar.components([.day], from: startDate, to: endDate, options: [])
+                    let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+                    return components.day!
+                 }
+ 
+                 // im stuck here comnverting days added to array to MM / DD
+ 
+                 func addDays(days: Int) -> Date {
+                    let today = Date()
+                    let tomorrow = Calendar.current.date(byAdding: .day, value: days, to: today)
+                    print("\(tomorrow)")
+                    return tomorrow!
+                 }
+                 */
+ 
                 // MARK: - use date detail array in UI forecast
                 
                 print(dateDetailArray)
@@ -400,7 +442,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     print("Num Days: \(self.NumOfDays)")
                     
-                    self.forecastOneDay.text = dateDetailArray[0 + self.NumOfDays ][0]
+                    self.forecastOneDay.text = self.numOfDaysToShortDate(numOfDays: self.NumOfDays)
                     
                     self.forecastOneIcon.image =  setIcon(input: dateDetailArray[0 + self.NumOfDays ][1])
                     
@@ -410,7 +452,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     //-----
                     
-                    self.forecastTwoDay.text = dateDetailArray[1 + self.NumOfDays ][0]
+                    self.forecastTwoDay.text = self.numOfDaysToShortDate(numOfDays: self.NumOfDays + 1)
                     
                     self.forecastTwoIcon.image = setIcon(input: dateDetailArray[1 + self.NumOfDays ][1])
                     
@@ -420,7 +462,7 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
                     
                     //----
                     
-                    self.forecastThreeDay.text = dateDetailArray[2 + self.NumOfDays ][0]
+                    self.forecastThreeDay.text = self.numOfDaysToShortDate(numOfDays: self.NumOfDays + 2)
                     
                     self.forecastThreeIcon.image = setIcon(input: dateDetailArray[2 + self.NumOfDays ][1])
                     
