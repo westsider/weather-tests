@@ -13,6 +13,7 @@
 		0D23AB971E05B15200A03BFA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB951E05B15200A03BFA /* Main.storyboard */; };
 		0D23AB991E05B15200A03BFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB981E05B15200A03BFA /* Assets.xcassets */; };
 		0D23AB9C1E05B15200A03BFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D23AB9A1E05B15200A03BFA /* LaunchScreen.storyboard */; };
+		0DA186781E144E3700AE3BA4 /* DatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA186771E144E3700AE3BA4 /* DatePicker.swift */; };
 		0DE69EE41E073FCB0094EE93 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE69EE31E073FCB0094EE93 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		0D23AB981E05B15200A03BFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0D23AB9B1E05B15200A03BFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0D23AB9D1E05B15200A03BFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0DA186771E144E3700AE3BA4 /* DatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePicker.swift; sourceTree = "<group>"; };
 		0DE69EE31E073FCB0094EE93 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 			children = (
 				0D23AB951E05B15200A03BFA /* Main.storyboard */,
 				0D23AB931E05B15200A03BFA /* ViewController.swift */,
+				0DA186771E144E3700AE3BA4 /* DatePicker.swift */,
 				0D14BB041E0992FF0095C17C /* WeatherClient.swift */,
 				0D23AB981E05B15200A03BFA /* Assets.xcassets */,
 				0D23AB9A1E05B15200A03BFA /* LaunchScreen.storyboard */,
@@ -155,6 +158,7 @@
 				0D23AB941E05B15200A03BFA /* ViewController.swift in Sources */,
 				0D23AB921E05B15200A03BFA /* AppDelegate.swift in Sources */,
 				0D14BB051E0992FF0095C17C /* WeatherClient.swift in Sources */,
+				0DA186781E144E3700AE3BA4 /* DatePicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

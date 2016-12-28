@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-// simple forcast get  day hi low
-//  let forecastDetail = ForecastDetail.forecastDetialArray(json: json!)
-
 struct ForecastDetail {
     let high: String
     let low: String
@@ -26,20 +23,6 @@ struct ForecastDate {
     let weekdayShort: String
     let weekday: String
 }
-
-/*
-struct weatherIcons {
-    let chancerain =  UIImage(named: "chancerain")!
-    let chancetstorms =  UIImage(named: "chancetstorms")!
-    let clear =  UIImage(named: "clear")!
-    let none =  UIImage(named: "none")!
-    let nt_clear =  UIImage(named: "nt_clear")!
-    let nt_partlycloudy =  UIImage(named: "nt_partlycloudy")!
-    let overcast =  UIImage(named: "overcast")!
-    let partlycloudy =  UIImage(named: "partlycloudy")!
-    let snow =  UIImage(named: "snow")!
-}
-*/
 
 func setIcon(input:String)-> UIImage {
     
