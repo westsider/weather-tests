@@ -30,7 +30,8 @@
 //  show short date on forecast
 //  stack view for weather
 
-//  move to own file and class:     findOnMap(input: cityInput.text!)   findWeather()     getForecast()
+//  refactor - 3 tries no joy, try just breaking in to smaller functions, then moving 1 function at a time to model
+//  chore curreently making classes for all the vars that need passing
 
 import UIKit
 import CoreLocation
@@ -93,6 +94,10 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     var count = "2"
     
     let locationManager = CLLocationManager()
+    
+    var currentWeather = CurrentWeather.sharedInstance
+    
+    var currentLocation = CurrentLocation.sharedInstance
     
     var lat = "0000"
     
@@ -180,14 +185,9 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locationArray = locations as NSArray
-        let locationObj = locationArray.lastObject as! CLLocation
-        let coord = locationObj.coordinate
-        lat = "\(coord.latitude)"
-        long = "\(coord.longitude)"
-        latLong = "\(lat)\(long)"
-        print(latLong)
-        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
+
+        let locationObj =  generateGPS(locations: locations)
+        
         locationManager.stopUpdatingLocation()
         
         CLGeocoder().reverseGeocodeLocation(locationObj, completionHandler: {(placemarks, error) -> Void in
@@ -207,6 +207,18 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             }
         })
         
+    }
+    
+    func generateGPS(locations: [CLLocation])-> CLLocation {
+        let locationArray = locations as NSArray
+        let locationObj = locationArray.lastObject as! CLLocation
+        let coord = locationObj.coordinate
+        lat = "\(coord.latitude)"
+        long = "\(coord.longitude)"
+        latLong = "\(lat)\(long)"
+        print(latLong)
+        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
+        return locationObj
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
