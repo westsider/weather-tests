@@ -51,6 +51,13 @@ class CurrentWeather {
     
     var forcastURL = NSURL(string: "api.openweathermap.org/data/2.5/forecast/q={city name},{country code}&cnt={cnt}")
     
+    func updateUrl(last: String, first: String) {
+        url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first + ".json")
+        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first + ".json")
+        
+        //url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+        //forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+    }
 }
 
 class CurrentLocation {
@@ -59,7 +66,9 @@ class CurrentLocation {
     
     var cityInput = ""
     
+    var last = ""
     
+    var first = ""
     
     
 }

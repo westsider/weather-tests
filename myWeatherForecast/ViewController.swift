@@ -93,6 +93,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     var count = "2"
     
+    var datePickerUtility = DatePickerUtility()
+    
     let locationManager = CLLocationManager()
     
     var currentWeather = CurrentWeather.sharedInstance
@@ -108,9 +110,6 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     var pickedDate = Date()
     
     var NumOfDays = 1
-    
-    var datePickerUtility = DatePickerUtility()
-
     
     // this is my current weather api call
     //  https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/CA/Venice.json
@@ -198,17 +197,35 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
             } else {
                 if let placemarks = placemarks, let placemark = placemarks.first {
                     
+                    // make this update the UI city input text
                     self.cityInput.text = placemark.locality! + " " + placemark.administrativeArea! // or loction
-                    self.findOnMap(input: self.cityInput.text!)
-                    //self.findWeather()
+                    
+                    // added this to make sure global var was saved
+                    self.currentLocation.cityInput = placemark.locality! + " " + placemark.administrativeArea! // or loction
+                    print("currentLocation.cityInput = \(self.currentLocation.cityInput)")
+                    
+                    // call findOnMap when gps location is found
+                    if self.currentLocation.cityInput != " " {
+                        self.findOnMap(input: self.currentLocation.cityInput)
+                    }
+                    
+                    
                 } else {
                     self.cityInput.text = "No Matching Addresses Found"
                 }
             }
+            
         })
         
     }
     
+    // use notification  or property observers to update searchbar
+    func updateSearchBar(message: String) {
+        
+    }
+    
+    
+    // move this to location client
     func generateGPS(locations: [CLLocation])-> CLLocation {
         let locationArray = locations as NSArray
         let locationObj = locationArray.lastObject as! CLLocation
@@ -217,7 +234,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         long = "\(coord.longitude)"
         latLong = "\(lat)\(long)"
         print(latLong)
-        forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
+        //forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
+        currentWeather.forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/lat=\(lat)&lon=-\(long).json")
         return locationObj
     }
     
@@ -227,8 +245,10 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
     
     // TODO: - Refactor -------------------------------------------------------------------------------------------------------
     // MARK: - Parse Location
+    // takes text input then parses city / state. returns url and updates search
     func findOnMap(input: String) {
-        let location = cityInput.text!
+        //  let location = cityInput.text!
+        let location = input
         let str = location
         let split = str.characters.split(separator: " ")
         let size = split.count
@@ -238,31 +258,46 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         locationActivity.startAnimating()
         
         switch size {
+            
+        // no text entered, use gps to find location
         case 0:
             self.findMyLocation()
             cityInput.text = "Finding Location Based on GPS"
-        case 2:
-            last    = String(split.suffix(1).joined(separator: [" "]))
-            first = String(split.prefix(upTo: 1).joined(separator: [" "]))
-            url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first + ".json")
-            self.findWeather()
-        case 3:
-            last    = String(split.suffix(1).joined(separator: [" "]))
-            first = String(split.prefix(upTo: 2).joined(separator: [" "]))
-            url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
-            self.findWeather()
             
+        //  city , state -- Venice, CA
+        case 2:
+            currentLocation.last = String(split.suffix(1).joined(separator: [" "]))
+            currentLocation.first = String(split.prefix(upTo: 1).joined(separator: [" "]))
+            currentWeather.updateUrl(last: currentLocation.last, first: currentLocation.first)
+            self.findWeather()
+            //last    = String(split.suffix(1).joined(separator: [" "]))
+            //first = String(split.prefix(upTo: 1).joined(separator: [" "]))
+            //url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first + ".json")
+            //forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first + ".json")
+            
+        // city city, state -- San Fransisco, CA
+        case 3:
+            currentLocation.last = String(split.suffix(1).joined(separator: [" "]))
+            currentLocation.first = String(split.prefix(upTo: 2).joined(separator: [" "]))
+            // must join first 2 city names by _ underscore
+            currentWeather.updateUrl(last: currentLocation.last, first: currentLocation.first.replacingOccurrences(of: " ", with: "_"))
+            self.findWeather()
+            //  last    = String(split.suffix(1).joined(separator: [" "]))
+            //first = String(split.prefix(upTo: 2).joined(separator: [" "]))
+            //url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+            //forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + last + "/" + first.replacingOccurrences(of: " ", with: "_") + ".json")
+            
+        // only 1 word entered, need more info
         default:
-            first = String(split.prefix(upTo: 1).joined(separator: [" "]))
-            url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + first + ".json")
-            forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + first + ".json")
+            //  first = String(split.prefix(upTo: 1).joined(separator: [" "]))
+            //  url = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/conditions/q/" + first + ".json")
+            //  forcastURL = NSURL(string: "https://api.wunderground.com/api/f6373e95fa296c84/forecast10day/q/" + first + ".json")
             //  print("ERROR: Please include a state or country")
             cityInput.text = "Please include a state or country"
         }
     }
     
+
     // TODO: - Refactor -------------------------------------------------------------------------------------------------------
     // MARK: - Get Weather - Current weather OR city and Parse
     func findWeather() {
@@ -273,7 +308,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         var temp = 0.0
         var weather = ""
         
-        let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
+        //  let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
+        let task = URLSession.shared.dataTask(with: currentWeather.url! as URL) {(data, response, error) in
             
             if let urlContent = data {
                 
@@ -352,7 +388,8 @@ class ViewController: UIViewController, UISearchBarDelegate, CLLocationManagerDe
         
         weathyerActivity.startAnimating()
         
-        let task = URLSession.shared.dataTask(with: forcastURL! as URL) {(data, response, error) in
+        // let task = URLSession.shared.dataTask(with: forcastURL! as URL) {(data, response, error) in
+           let task = URLSession.shared.dataTask(with: currentWeather.forcastURL! as URL) {(data, response, error) in
             
             let json: [String: Any]?
             
